@@ -1,0 +1,54 @@
+services:
+    api:
+        restart: always
+        build: .
+        ports:
+            - "8080:80"
+        working_dir: /var/www/html
+        volumes:
+            - .:/var/www/html
+        environment:
+            - AWS_ENDPOINT=http://localstack:4566
+        depends_on:
+            - postgres16
+            - localstack
+
+    scheduler:
+        build: .
+        restart: always
+        working_dir: /var/www/html
+        command: /bin/sh -c "while true; do php artisan schedule:run >> /var/log/scheduler.log 2>&1; sleep 60; done"
+        volumes:
+            - .:/var/www/html
+        depends_on:
+            - api
+            - postgres16
+            - localstack
+
+    postgres16:
+        image: postgres:17
+        restart: always
+        ports:
+            - "5434:5432"
+        environment:
+            POSTGRES_USER: "postgres"
+            POSTGRES_PASSWORD: "postgres"
+            POSTGRES_DB: "postgres"
+        volumes:
+            - postgres16-data:/var/lib/postgresql/data
+
+    localstack:
+        image: localstack/localstack:latest
+        restart: always
+        ports:
+            - "4566:4566"
+        environment:
+            - SERVICES=s3
+            - DEBUG=1
+            - DEFAULT_REGION=ap-southeast-1
+        volumes:
+            - localstack-data:/var/lib/localstack
+
+volumes:
+    postgres16-data:
+    localstack-data:

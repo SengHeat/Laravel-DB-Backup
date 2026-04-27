@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(php -m)",
+      "Bash(herd services:list)",
+      "Bash(pg_isready -h 127.0.0.1 -p 5432)",
+      "Bash(php artisan:*)"
+    ]
+  },
+  "enabledMcpjsonServers": [
+    "laravel-boost"
+  ]
+}

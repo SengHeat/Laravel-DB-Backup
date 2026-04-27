@@ -15,4 +15,10 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
-    })->create();
+    })
+//    ->withSchedule(function (Schedule $schedule) {
+//        Schedule::command('backup:clean')->daily()->at('01:00');  // Clean old backups
+//        Schedule::command('backup:run')->daily()->at('02:00');    // Run new backup
+//        Schedule::command('backup:monitor')->daily()->at('03:00'); // Health check
+//    })
+    ->create();
